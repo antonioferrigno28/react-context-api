@@ -1,57 +1,38 @@
 import React from "react";
+import { usePostContext } from "../context/PostContext";
 import { Link } from "react-router-dom";
 
-export default function PostsList({ posts }) {
+export default function PostsList() {
+  const { postList } = usePostContext();
+
   return (
-    <table className="mt-4 table table-bordered border-dark">
-      <thead className="table-dark">
-        <tr>
-          <th scope="col">Autore</th>
-          <th scope="col">Contenuto</th>
-          <th scope="col">Immagine</th>
-          <th scope="col">Categoria</th>
-          <th scope="col">Pubblico</th>
-          <th scope="col">Cosa vuoi fare?</th>
-        </tr>
-      </thead>
-      <tbody>
-        {posts.map((post) => (
-          <tr key={post.id} className="table-danger">
-            <td>
-              <b>{post.autore}</b>
-            </td>
-            <td>
-              <i>{post.contenuto}</i>
-            </td>
-            <td>
-              <img
-                src={post.immagine}
-                width="50"
-                alt={`Immagine di ${post.autore}`}
-              />
-            </td>
-            <td>
-              <span className="badge text-bg-secondary">{post.categoria}</span>
-            </td>
-            <td>
-              {post.published ? (
-                <p className="text-success fw-bold">"Pubblico"</p>
-              ) : (
-                <p className="text-danger fw-bold">"Privato"</p>
-              )}
-            </td>
-            <td>
-              <Link
-                to={`/posts/${post.id}`}
-                type="button"
-                className="btn btn-success"
+    <div className="row">
+      {postList.map((post) => (
+        <div className="col-md-4 mb-3" key={post.id}>
+          <div className="card h-100">
+            <img
+              src={post.immagine}
+              className="card-img-top"
+              alt={`Immagine di ${post.autore}`}
+            />
+            <div className="card-body">
+              <h5 className="card-title">{post.autore}</h5>
+              <p className="card-text">{post.contenuto}</p>
+              <span className="badge bg-secondary">{post.categoria}</span>
+              <p
+                className={`mt-2 ${
+                  post.published ? "text-success" : "text-danger"
+                }`}
               >
+                {post.published ? "Pubblico" : "Privato"}
+              </p>
+              <Link to={`/posts/${post.id}`} className="btn btn-success mt-3">
                 Mostra Post
               </Link>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
